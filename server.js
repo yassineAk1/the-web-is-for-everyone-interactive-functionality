@@ -5,6 +5,18 @@ import express from 'express'
 // Importeer de Liquid package (ook als dependency via npm geïnstalleerd)
 import { Liquid } from 'liquidjs';
 
+
+console.log('Hieronder moet je waarschijnlijk nog wat veranderen')
+// Doe een fetch naar de data die je nodig hebt
+// const apiResponse = await fetch('...')
+
+// Lees van de response van die fetch het JSON object in, waar we iets mee kunnen doen
+// const apiResponseJSON = await apiResponse.json()
+
+// Controleer eventueel de data in je console
+// (Let op: dit is _niet_ de console van je browser, maar van NodeJS, in je terminal)
+// console.log(apiResponseJSON)
+
 // Maak een nieuwe Express applicatie aan, waarin we de server configureren
 const app = express()
 
@@ -16,66 +28,67 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
 // Stel Liquid in als 'view engine'
-const engine = new Liquid()
-app.engine('liquid', engine.express())
+const engine = new Liquid();
+app.engine('liquid', engine.express()); 
 
 // Stel de map met Liquid templates in
 // Let op: de browser kan deze bestanden niet rechtstreeks laden (zoals voorheen met HTML bestanden)
 app.set('views', './views')
 
+// fetcht een URL en geef direct .data terug
+const fetchData = url => fetch(url).then(r => r.json()).then(r => r.data)
 
-console.log('Let op: Er zijn nog geen routes. Voeg hier dus eerst jouw GET en POST routes toe.')
+// homepagina laad alle snapmaps en opent de eerste
+app.get('/', async (req, res) => {
+  const snapmaps = await fetchData('https://fdnd-agency.directus.app/items/snappthis_snapmap')
+  // Gebruik de uuid van de eerste snapmap om de details op te halen
+  const snapmap = await fetchData(`https://fdnd-agency.directus.app/items/snappthis_snapmap/${snapmaps[0].uuid}?fields=*,snaps.*,groups.snappthis_group_uuid.*`)
+  res.render('snapmap.liquid', { snapmaps, snapmap, snaps: snapmap.snaps, groep: snapmap.groups[0]?.snappthis_group_uuid || null, activePage: 'home' })
+})
 
-/*
-// Zie https://expressjs.com/en/5x/api.html#app.get.method over app.get()
-app.get(…, async function (request, response) {
+// Detailpagina van één snapmap, haalt snapmap en alle snapmaps tegelijk op
+app.get('/snapmap/:uuid', async (req, res) => {
+  // Promise.all stuurt beide fetches tegelijk op
+  const [snapmap, snapmaps] = await Promise.all([
+    fetchData(`https://fdnd-agency.directus.app/items/snappthis_snapmap/${req.params.uuid}?fields=*,snaps.*,groups.snappthis_group_uuid.*`),
+    fetchData('https://fdnd-agency.directus.app/items/snappthis_snapmap'),
+  ])
+  res.render('snapmap.liquid', { snapmap, snaps: snapmap.snaps, snapmaps, groep: snapmap.groups[0]?.snappthis_group_uuid || null, activePage: 'home' })
+})
+
+// Overzichtspagina van alle groepen
+app.get('/groepen', async (req, res) => {
+  const groepen = await fetchData('https://fdnd-agency.directus.app/items/snappthis_group?fields=*,snappmap.*')
+  res.render('groepen.liquid', { groepen, activePage: 'groepen' })
+})
+
+// Detailpagina van één groep op basis van uuid in de URL
+app.get('/groep/:uuid', async (req, res) => {
+  const groep = await fetchData(`https://fdnd-agency.directus.app/items/snappthis_group/${req.params.uuid}?fields=*,snappmap.snappthis_snapmap_uuid.*`)
+  res.render('groep.liquid', { groep, activePage: 'groepen' })
+})
+
+
+// Maak een POST route voor de index; hiermee kun je bijvoorbeeld formulieren afvangen
+// Hier doen we nu nog niets mee, maar je kunt er mee spelen als je wilt
+app.post('/', async function (request, response) {
+  // Je zou hier data kunnen opslaan, of veranderen, of wat je maar wilt
+  // Er is nog geen afhandeling van een POST, dus stuur de bezoeker terug naar /
+  response.redirect(303, '/')
+})
+
+app.use((req, response) => {
   
-  // Zie https://expressjs.com/en/5x/api.html#res.render over response.render()
-  response.render(…)
-})
-*/
-
-/*
-// Zie https://expressjs.com/en/5x/api.html#app.post.method over app.post()
-app.post(…, async function (request, response) {
-
-  // In request.body zitten alle formuliervelden die een `name` attribuut hebben in je HTML
-  console.log(request.body)
-
-  // Via een fetch() naar Directus vullen we nieuwe gegevens in
-
-  // Zie https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch over fetch()
-  // Zie https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify over JSON.stringify()
-  // Zie https://docs.directus.io/reference/items.html#create-an-item over het toevoegen van gegevens in Directus
-  // Zie https://docs.directus.io/reference/items.html#update-an-item over het veranderen van gegevens in Directus
-  const fetchResponse = await fetch(…, {
-    method: …,
-    body: JSON.stringify(…),
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-
-  // Als de POST niet gelukt is, kun je de response loggen. Sowieso een goede debugging strategie.
-  // console.log(fetchResponse)
-
-  // Eventueel kun je de JSON van die response nog debuggen
-  // const fetchResponseJSON = await fetchResponse.json()
-  // console.log(fetchResponseJSON)
-
-  // Redirect de gebruiker daarna naar een logische volgende stap
-  // Zie https://expressjs.com/en/5x/api.html#res.redirect over response.redirect()
-  response.redirect(303, …)
-})
-*/
+  response.status(404).render('error.liquid')
+});
 
 
 // Stel het poortnummer in waar Express op moet gaan luisteren
-// Lokaal is dit poort 8000; als deze applicatie ergens gehost wordt, waarschijnlijk poort 80
+// Lokaal is dit poort 8000, als dit ergens gehost wordt, is het waarschijnlijk poort 80
 app.set('port', process.env.PORT || 8000)
 
-// Start Express op, gebruik daarbij het zojuist ingestelde poortnummer op
+// Start Express op, haal daarbij het zojuist ingestelde poortnummer op
 app.listen(app.get('port'), function () {
-  // Toon een bericht in de console
-  console.log(`Daarna kun je via http://localhost:${app.get('port')}/ jouw interactieve website bekijken.\n\nThe Web is for Everyone. Maak mooie dingen 🙂`)
+  // Toon een bericht in de console en geef het poortnummer door
+  console.log(`Application started on http://localhost:${app.get('port')}`)
 })

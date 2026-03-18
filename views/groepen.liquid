@@ -1,0 +1,33 @@
+{% render 'views/head.liquid' %}
+
+<header>
+  <nav class="header-nav">
+    <span class="map-title">Your groups</span>
+    <button class="nav-plus-btn" type="button">+</button>
+  </nav>
+</header>
+
+<main>
+  <ul class="group-list">
+    {% for groep in groepen %}
+      <li class="group-item">
+        <a class="group-link" href="/groep/{{ groep.uuid }}">
+          <div class="group-info">
+            <span class="group-name">{{ groep.name }}</span>
+            <span class="group-members">{{ groep.users.size }} members</span>
+          </div>
+        </a>
+        <div class="group-actions">
+          <button class="group-action-btn" type="button">
+            <img src="/addmember.svg" alt="Add member" width="36" height="36">
+          </button>
+          <button class="group-action-btn" type="button">
+            <img src="/addsnap.svg" alt="Add snap" width="36" height="36">
+          </button>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</main>
+
+{% render 'views/foot.liquid', activePage: activePage %}

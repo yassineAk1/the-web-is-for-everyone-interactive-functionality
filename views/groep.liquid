@@ -1,0 +1,22 @@
+{% render 'views/head.liquid' %}
+
+<header>
+  <nav class="header-nav">
+    <a class="nav-back" href="/groepen">&#8249;</a>
+    <span class="map-title">{{ groep.name }}</span>
+  </nav>
+</header>
+
+<main>
+  <ul class="snapmap-list">
+    {% for item in groep.snappmap %}
+      {% if item.snappthis_snapmap_uuid %}
+        <li>
+          <a href="/snapmap/{{ item.snappthis_snapmap_uuid.uuid }}">{{ item.snappthis_snapmap_uuid.name }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</main>
+
+{% render 'views/foot.liquid', activePage: activePage %}

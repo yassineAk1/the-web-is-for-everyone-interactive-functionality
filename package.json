@@ -1,29 +1,39 @@
 {
-  "name": "the-web-is-for-everyone-interactive-functionality",
+  "name": "server-side-rendering",
   "version": "1.0.0",
-  "description": "Ontwerp en maak voor een opdrachtgever een interactieve toepassing die voor iedereen toegankelijk is.",
+  "description": "Ontwerp en ontwikkel een server-side website voor een opdrachtgever.",
   "main": "server.js",
   "type": "module",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js",
+    "dev": "browser-sync start --proxy localhost:8000 --files '**/*.liquid, **/*.css, **/*.js'"
+  },
+  "nodemon": {
+    "ignore": [
+      "**/*.liquid",
+      "**/*.css"
+    ]
   },
   "keywords": [
     "node",
     "express",
-    "liquid",
-    "progressive enhancement"
+    "liquid"
   ],
   "author": "J.P. Sturkenboom <j.p.sturkenboom@hva.nl>",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/fdnd-task/the-web-is-for-everyone-interactive-functionality/issues"
+    "url": "https://github.com/fdnd-task/server-side-rendering/issues"
   },
-  "homepage": "https://github.com/fdnd-task/the-web-is-for-everyone-interactive-functionality#readme",
+  "homepage": "https://github.com/fdnd-task/server-side-rendering#readme",
   "dependencies": {
-    "express": "latst",
-    "liquidjs": "latest"
+    "express": "^5.2.1",
+    "liquidjs": "latest",
+    "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4"
   }
 }
