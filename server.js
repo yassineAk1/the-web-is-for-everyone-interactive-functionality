@@ -1,9 +1,12 @@
 // Importeer het npm package Express (uit de door npm aangemaakte node_modules map)
 // Deze package is geïnstalleerd via `npm install`, en staat als 'dependency' in package.json
 import express from 'express'
+import multer from 'multer'
 
 // Importeer de Liquid package (ook als dependency via npm geïnstalleerd)
 import { Liquid } from 'liquidjs';
+
+const upload = multer({ storage: multer.memoryStorage() })
 
 
 console.log('Hieronder moet je waarschijnlijk nog wat veranderen')
@@ -77,8 +80,41 @@ app.post('/', async function (request, response) {
   response.redirect(303, '/')
 })
 
+
+
+// Upload een foto naar een snapmap
+app.post("/snapmap/:uuid", upload.single("file"), async (req, res) => {
+  const { uuid } = req.params
+
+  // Stap 1: Bestand uploaden naar Directus
+  const formData = new FormData()
+  formData.append("file", new Blob([req.file.buffer], { type: req.file.mimetype }), req.file.originalname)
+
+  const uploadResponse = await fetch("https://fdnd-agency.directus.app/files", {
+    method: "POST",
+    body: formData,
+  })
+  const { data: fileData } = await uploadResponse.json()
+
+  if (!fileData?.id) return res.redirect(303, `/snapmap/${uuid}/?status=error`)
+
+  // Stap 2: Nieuwe snap aanmaken in Directus
+  const snapResponse = await fetch("https://fdnd-agency.directus.app/items/snappthis_snap", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      location: "Amsterdam Zuidoost",
+      snapmap: uuid,
+      author: "467a4442-69e4-44ae-829a-b95e25c4dd7b",
+      picture: fileData.id,
+    }),
+  })
+
+  res.redirect(303, `/snapmap/${uuid}/?status=${snapResponse.ok ? "success" : "error"}`)
+})
+
 app.use((req, response) => {
-  
+
   response.status(404).render('error.liquid')
 });
 
