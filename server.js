@@ -103,9 +103,9 @@ app.post("/snapmap/:uuid", upload.single("file"), async (req, res) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      location: "Amsterdam Zuidoost",
+      location: "Atlantis",
       snapmap: uuid,
-      author: "467a4442-69e4-44ae-829a-b95e25c4dd7b",
+      author: "26c884d3-f7cf-4f9d-8b3d-4b74f310cd36",
       picture: fileData.id,
     }),
   })
