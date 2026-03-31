@@ -38,25 +38,31 @@ app.engine('liquid', engine.express());
 // Let op: de browser kan deze bestanden niet rechtstreeks laden (zoals voorheen met HTML bestanden)
 app.set('views', './views')
 
-// fetcht een URL en geef direct .data terug
+//fetcht een URL en geeft direct de data array of het data object terug
 const fetchData = url => fetch(url).then(r => r.json()).then(r => r.data)
 
-// homepagina laad alle snapmaps en opent de eerste
-app.get('/', async (req, res) => {
-  const snapmaps = await fetchData('https://fdnd-agency.directus.app/items/snappthis_snapmap')
-  // Gebruik de uuid van de eerste snapmap om de details op te halen
-  const snapmap = await fetchData(`https://fdnd-agency.directus.app/items/snappthis_snapmap/${snapmaps[0].uuid}?fields=*,snaps.*,groups.snappthis_group_uuid.*`)
-  res.render('snapmap.liquid', { snapmaps, snapmap, snaps: snapmap.snaps, groep: snapmap.groups[0]?.snappthis_group_uuid || null, activePage: 'home' })
+// Homepagina haal de eerste snapmap op 
+app.get('/', async (_req, res) => {
+  const [first] = await fetchData('https://fdnd-agency.directus.app/items/snappthis_snapmap?limit=1')
+  res.redirect(`/snapmap/${first.uuid}`)
 })
 
-// Detailpagina van één snapmap, haalt snapmap en alle snapmaps tegelijk op
+// Snapmap pagina toont de foto's van één snapmap en de andere snapmaps van dezelfde groep in de dropdown
 app.get('/snapmap/:uuid', async (req, res) => {
-  // Promise.all stuurt beide fetches tegelijk op
-  const [snapmap, snapmaps] = await Promise.all([
-    fetchData(`https://fdnd-agency.directus.app/items/snappthis_snapmap/${req.params.uuid}?fields=*,snaps.*,groups.snappthis_group_uuid.*`),
-    fetchData('https://fdnd-agency.directus.app/items/snappthis_snapmap'),
-  ])
-  res.render('snapmap.liquid', { snapmap, snaps: snapmap.snaps, snapmaps, groep: snapmap.groups[0]?.snappthis_group_uuid || null, activePage: 'home' })
+  // Haalt de snapmap op inclusief foto's en de groep waar hij bij hoort
+  const snapmap = await fetchData(`https://fdnd-agency.directus.app/items/snappthis_snapmap/${req.params.uuid}?fields=*,snaps.*,groups.snappthis_group_uuid.*`)
+
+  // Haalt het groepsobject op uit de koppeling
+  const groep = snapmap.groups[0]?.snappthis_group_uuid
+
+  // Haalt de andere snapmaps op die tot dezelfde groep behoren voor de dropdown
+  let snapmaps = []
+  if (groep) {
+    const groepData = await fetchData(`https://fdnd-agency.directus.app/items/snappthis_group/${groep.uuid}?fields=snappmap.snappthis_snapmap_uuid.*`)
+    snapmaps = groepData.snappmap.map(sm => sm.snappthis_snapmap_uuid)
+  }
+
+  res.render('snapmap.liquid', { snapmap, snaps: snapmap.snaps, snapmaps, groep, activePage: 'home' })
 })
 
 // Overzichtspagina van alle groepen

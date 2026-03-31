@@ -6,9 +6,11 @@
       <summary class="map-title-btn">{{ snapmap.name }}</summary>
       <ul class="snapmap-dropdown-list">
         {% for sm in snapmaps %}
-          <li>
-            <a href="/snapmap/{{ sm.uuid }}">{{ sm.name }}</a>
-          </li>
+          {% unless sm.uuid == snapmap.uuid %}
+            <li>
+              <a href="/snapmap/{{ sm.uuid }}">{{ sm.name }}</a>
+            </li>
+          {% endunless %}
         {% endfor %}
       </ul>
     </details>
