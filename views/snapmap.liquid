@@ -13,7 +13,7 @@
       </ul>
     </details>
     <button class="nav-grid-btn" type="button">
-      <img src="/grid.svg" alt="" width="22" height="22">
+      <img src="/assets/grid.svg" alt="" width="22" height="22">
     </button>
   </nav>
 </header>
@@ -21,7 +21,7 @@
 <main>
   {% if groep %}
     <div class="group-bar">
-      <img class="group-icon" src="/GroupST-copy.svg" alt="" width="20" height="20">
+      <img class="group-icon" src="/assets/GroupST-Copy.svg" alt="" width="20" height="20">
       <a href="/groep/{{ groep.uuid }}" class="group-bar-name">{{ groep.name }}</a>
     </div>
   {% endif %}
@@ -29,7 +29,7 @@
 <form method="POST" action="/snapmap/{{ snapmap.uuid }}" enctype="multipart/form-data" id="snap-form" class="camera-section">
   <input type="file" name="file" accept="image/*" required id="snap-input" hidden>
   <label for="snap-input" class="camera-btn">
-    <img src="/camera-alt.svg" alt="">
+    <img src="/assets/camera-alt.svg" alt="">
   </label>
 </form>
 
@@ -47,7 +47,7 @@
         {% if snap.picture %}
           <img src="https://fdnd-agency.directus.app/assets/{{ snap.picture }}" alt="snap">
         {% else %}
-          <img src="/placeholder.jpeg" alt="">
+          <img src="/assets/placeholder.jpeg" alt="">
         {% endif %}
       </li>
     {% endfor %}
