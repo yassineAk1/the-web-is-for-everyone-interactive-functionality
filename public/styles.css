@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: "Bariol";
-  src: url("./Bariol_Regular.otf") format("opentype");
+  src: url("fonts/Bariol_Regular.otf") format("opentype");
   font-display: swap;
 }
 
@@ -270,7 +270,9 @@ main {
 }
 
 .photo-item {
-    background-color: #e5e7eb;
+    background-color: #e5e7eb;  
+    animation: fade-in 0.5s backwards;
+    animation-delay: calc(100ms * sibling-index());
 }
 
 .photo-item img {
@@ -278,7 +280,14 @@ main {
     aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
+
 }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 
 /* ---------snapmap dropdown----------- */
 .snapmap-dropdown {
