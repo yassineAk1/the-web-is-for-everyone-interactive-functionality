@@ -78,6 +78,15 @@ app.get('/groep/:uuid', async (req, res) => {
 })
 
 
+// Detailpagina van één snap op basis van uuid in de URL
+app.get('/snap/:uuid', async (req, res) => {
+  // Haalt de snap op inclusief de bijbehorende snapmap (voor de naam in de header)
+  const snap = await fetchData(
+    `https://fdnd-agency.directus.app/items/snappthis_snap/${req.params.uuid}?fields=*.*`
+  )
+  res.render('snap.liquid', { snap, activePage: 'home' })
+})
+
 // Maak een POST route voor de index; hiermee kun je bijvoorbeeld formulieren afvangen
 // Hier doen we nu nog niets mee, maar je kunt er mee spelen als je wilt
 app.post('/', async function (request, response) {

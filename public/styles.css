@@ -5,6 +5,10 @@
     list-style: none;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 @font-face {
   font-family: "Bariol";
   src: url("fonts/Bariol_Regular.otf") format("opentype");
