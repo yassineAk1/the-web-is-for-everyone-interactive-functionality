@@ -46,11 +46,13 @@
   <ul class="photo-grid">
     {% for snap in snaps %}
       <li class="photo-item">
-        {% if snap.picture %}
-          <img src="https://fdnd-agency.directus.app/assets/{{ snap.picture }}" alt="snap">
-        {% else %}
-          <img src="/assets/placeholder.jpeg" alt="">
-        {% endif %}
+        <a href="/snap/{{ snap.uuid }}">
+          {% if snap.picture %}
+            <img src="https://fdnd-agency.directus.app/assets/{{ snap.picture }}" alt="snap">
+          {% else %}
+            <img src="/assets/placeholder.jpeg" alt="">
+          {% endif %}
+        </a>
       </li>
     {% endfor %}
   </ul>
