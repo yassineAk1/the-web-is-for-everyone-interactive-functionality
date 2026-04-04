@@ -279,6 +279,12 @@ main {
     animation-delay: calc(100ms * sibling-index());
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .photo-item {
+        animation: none;
+    }
+}
+
 .photo-item img {
     width: 100%;
     aspect-ratio: 1 / 1;
