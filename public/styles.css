@@ -197,7 +197,9 @@ main {
 /* ---------camera section----------- */
 .camera-section {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
     padding: 3rem 1rem;
 }
 
