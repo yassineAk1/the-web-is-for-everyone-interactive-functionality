@@ -2,18 +2,22 @@
 
 <header>
   <nav class="header-nav">
-    <details class="snapmap-dropdown">
-      <summary class="map-title-btn">{{ snapmap.name }}</summary>
-      <ul class="snapmap-dropdown-list">
-        {% for sm in snapmaps %}
-          {% unless sm.uuid == snapmap.uuid %}
-            <li>
-              <a href="/snapmap/{{ sm.uuid }}">{{ sm.name }}</a>
-            </li>
-          {% endunless %}
-        {% endfor %}
-      </ul>
-    </details>
+    {% if snapmaps.size > 1 %}
+      <details class="snapmap-dropdown">
+        <summary class="map-title-btn">{{ snapmap.name }} ▾</summary>
+        <ul class="snapmap-dropdown-list">
+          {% for sm in snapmaps %}
+            {% unless sm.uuid == snapmap.uuid %}
+              <li>
+                <a href="/snapmap/{{ sm.uuid }}">{{ sm.name }}</a>
+              </li>
+            {% endunless %}
+          {% endfor %}
+        </ul>
+      </details>
+    {% else %}
+      <span class="map-title">{{ snapmap.name }}</span>
+    {% endif %}
     <button class="nav-grid-btn" type="button">
       <img src="/assets/grid.svg" alt="" width="22" height="22">
     </button>

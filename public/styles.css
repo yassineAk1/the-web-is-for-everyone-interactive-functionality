@@ -330,8 +330,14 @@ main {
     text-align: center;
 }
 
-.snapmap-dropdown-list li a:hover {
-    background-color: rgba(255,255,255,0.07);
+@media (hover: hover) {
+    .snapmap-dropdown-list li a:hover {
+        background-color: rgba(146, 146, 146, 0.07);
+    }
+
+    .map-title-btn:hover {
+        transform: scale(1.05);
+    }
 }
 
 /* ---------success bericht----------- */
