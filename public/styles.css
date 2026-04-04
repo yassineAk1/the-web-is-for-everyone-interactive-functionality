@@ -340,6 +340,13 @@ main {
     }
 }
 
+/* ---------snapp detail pagina----------- */
+
+.snap-detail-photo img{
+    width: 100%;
+}
+
+
 /* ---------success bericht----------- */
 .success-box {
     display: none;
