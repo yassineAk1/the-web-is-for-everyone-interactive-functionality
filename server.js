@@ -125,7 +125,7 @@ app.post("/snapmap/:uuid", upload.single("file"), async (req, res) => {
     }),
   })
 
-  res.redirect(303, `/snapmap/${uuid}/?status=${snapResponse.ok ? "success" : "error"}`)
+  res.redirect(303, `/snapmap/${uuid}${snapResponse.ok ? "#succes" : ""}`)
 })
 
 app.use((req, response) => {

@@ -326,6 +326,37 @@ main {
     background-color: rgba(255,255,255,0.07);
 }
 
+/* ---------success bericht----------- */
+.success-box {
+    display: none;
+}
+
+.success-box:target {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem 4rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 80%;
+    max-width: 320px;
+    z-index: 100;
+}
+
+.status-banner-btn {
+    background: #00E53D;
+    color: white;
+    border-radius: 50%;
+    padding: 1rem 1rem;
+    font-weight: 700;
+    align-self: center;
+    text-decoration: none;
+}
+
 /* ---------footer----------- */
 .footer-nav {
     background-color: var(--nav-bar-dark);
