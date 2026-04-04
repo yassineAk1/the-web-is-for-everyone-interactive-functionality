@@ -393,3 +393,12 @@ main {
 .nav-item.active {
     filter: invert(59%) sepia(97%) saturate(400%) hue-rotate(95deg) brightness(96%) contrast(101%);
 }
+
+@view-transition { navigation: auto; } 
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none;
+    }
+}

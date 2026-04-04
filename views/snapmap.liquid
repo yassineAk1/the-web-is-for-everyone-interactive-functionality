@@ -58,7 +58,7 @@
       <li class="photo-item">
         <a href="/snap/{{ snap.uuid }}">
           {% if snap.picture %}
-            <img src="https://fdnd-agency.directus.app/assets/{{ snap.picture }}" alt="snap">
+            <img src="https://fdnd-agency.directus.app/assets/{{ snap.picture }}" alt="snap" style="view-transition-name: snap-{{ snap.uuid }}">
           {% else %}
             <img src="/assets/placeholder.jpeg" alt="">
           {% endif %}
