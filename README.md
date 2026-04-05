@@ -50,11 +50,11 @@ https://github.com/user-attachments/assets/5991149e-4f6c-4703-9d95-8b6e33c0ef3d
 
 ### Progressive Enhancement
 
-De app is opgebouwd in drie lagen. Elke laag voegt iets toe, maar de vorige laag blijft altijd werken.
+De kern van dit project is dat de app werkt voor iedereen, ongeacht hun apparaat, browser of instellingen. Dat klinkt vanzelfsprekend, maar vraagt om concrete keuzes bij elke feature. De app is opgebouwd in drie lagen: elke laag voegt iets toe, maar de vorige laag blijft altijd werken.
 
 **Laag 1: HTML & Server**
 
-De basis werkt volledig zonder CSS of JavaScript. Het uploadformulier is een gewoon HTML-formulier dat via POST stuurt. De server verwerkt het verzoek en stuurt een nieuwe pagina terug. Geen client-side magie nodig.
+Het uploaden van een foto is de belangrijkste interactie in de app. De eerste keuze was om dit als een standaard HTML-formulier te bouwen, niet als een JavaScript-flow. Dat betekent dat de server het werk doet: het formulier stuurt via POST, de server verwerkt het bestand en stuurt een nieuwe pagina terug.
 
 ```html
 <form method="POST" enctype="multipart/form-data">
@@ -63,9 +63,23 @@ De basis werkt volledig zonder CSS of JavaScript. Het uploadformulier is een gew
 </form>
 ```
 
+Waarom? Omdat dit werkt op elke browser, elk apparaat, met of zonder JavaScript. Dit is de basis. Alles daarna is een verbetering bovenop.
+
 **Laag 2: CSS**
 
-CSS voegt visuele structuur en stijl toe. De fotogrid is responsive met CSS Grid. Foto's laden in met een staggered fade-in via `sibling-index()`. Voor gebruikers die beweging liever niet zien, worden animaties uitgeschakeld via `prefers-reduced-motion`.
+CSS voegt stijl en structuur toe, maar ook gedrag dat anders JavaScript zou vereisen.
+
+De succes-melding na een upload is hiervan een goed voorbeeld. Na een geslaagde upload redirect de server naar dezelfde pagina met `#succes` in de URL. Met de CSS `:target` selector wordt de melding dan zichtbaar, zonder één regel JavaScript.
+
+```css
+#succes:not(:target) {
+  display: none;
+}
+```
+
+Dit was een bewuste keuze: een succes-melding is geen reden om JavaScript te vereisen. CSS kan dit zelf af.
+
+De foto's in het grid laden in met een staggered fade-in via `sibling-index()`. Daarom staat de animatie alleen aan als de gebruiker daar geen bezwaar tegen heeft.
 
 ```css
 @media (prefers-reduced-motion: no-preference) {
@@ -76,17 +90,9 @@ CSS voegt visuele structuur en stijl toe. De fotogrid is responsive met CSS Grid
 }
 ```
 
-De succes-melding na upload werkt via de CSS `:target` selector, zonder JavaScript. Als de URL eindigt op `#succes`, wordt de melding zichtbaar.
-
-```css
-#succes:not(:target) {
-  display: none;
-}
-```
-
 **Laag 3: JavaScript**
 
-JavaScript verbetert de uploadervaring. Wanneer een gebruiker een foto kiest, verbergt het script de standaard submit-knop en toont direct een preview van de foto. Pas als de gebruiker bevestigt, wordt het formulier verstuurd.
+Pas in de derde laag komt JavaScript. Het script voegt één ding toe: een preview van de foto direct na het kiezen, zodat de gebruiker weet wat er geüpload gaat worden voordat ze bevestigen.
 
 ```js
 snapInput.addEventListener('change', (e) => {
@@ -96,27 +102,23 @@ snapInput.addEventListener('change', (e) => {
 })
 ```
 
-Dit is een bewuste keuze: de preview is een verbetering, geen vereiste. Zonder JavaScript werkt het formulier nog steeds.
+De submit-knop wordt standaard verborgen. JavaScript toont hem pas weer als de gebruiker de preview bevestigt. Staat JavaScript uit? Dan is de submit-knop er gewoon, en werkt het formulier zoals in laag 1.
 
-### Andere technische keuzes
+De preview is dus een verbetering van de ervaring, niet een vereiste voor de functionaliteit.
 
-| Techniek | Gebruik |
-|---|---|
-| **Express.js** | Server-side routing en POST-afhandeling |
-| **Liquid** | Templating voor dynamische HTML |
-| **Multer** | Bestandsupload verwerking |
-| **Directus API** | Ophalen en opslaan van data en bestanden |
-| **`<details>` / `<summary>`** | Dropdown voor snapmap-navigatie, werkt zonder JS |
-| **View Transitions API** | Soepele paginaovergangen via CSS |
-| **ARIA-labels** | Toegankelijkheid voor screenreaders |
+### Andere ontwerpkeuzes
 
-### Toegankelijkheid
+**`<details>` en `<summary>` voor de snapmap-dropdown**
 
-- Alle knoppen met alleen een icoon hebben een `aria-label`
-- Screenreader-tekst wordt verborgen via `.sr-only`
-- Focus-stijlen zijn goed zichtbaar door de rode outline
-- Succes-meldingen hebben `role="status"` zodat screenreaders ze voorlezen
-- Semantische HTML-structuur (`<header>`, `<main>`, `<footer>`, `<nav>`)
+`<details>` en `<summary>` zijn semantisch de juiste keuze voor een dropdown. Het is robuuste HTML die precies dit gedrag beschrijft, zonder extra code of JavaScript nodig te hebben.
+
+**View Transitions API**
+
+Bij het navigeren naar een foto-detailpagina lijkt de foto soepel te bewegen van de grid naar de detailweergave. Dit werkt via `view-transition-name` in CSS, gecombineerd met de View Transitions API. 
+
+**Toegankelijkheid**
+
+Alle knoppen met alleen een icoon hebben een `aria-label`, zodat screenreaders kunnen voorlezen wat de knop doet. Succes-meldingen hebben `role="status"` zodat ze automatisch worden voorgelezen. Focus-stijlen zijn bewust zichtbaar gehouden (rode outline) en niet weggehaald, wat helaas vaak wel gebeurt.
 
 ## Installatie
 
