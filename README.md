@@ -40,6 +40,12 @@ De app heeft een paar duidelijke schermen:
 4. Bevestig met de "Ja, voeg toe"-knop
 5. Na het uploaden verschijnt een bevestigingsmelding
 
+   
+
+https://github.com/user-attachments/assets/5991149e-4f6c-4703-9d95-8b6e33c0ef3d
+
+
+
 ## Kenmerken
 
 ### Progressive Enhancement
