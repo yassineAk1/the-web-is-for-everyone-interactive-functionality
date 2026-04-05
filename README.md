@@ -1,13 +1,11 @@
-# SnapThis - Interactieve Functionaliteit
-
-Een server-side web app waarmee gebruikers foto's kunnen uploaden en bekijken in snapmaps.
-
+# SnapThis
 
 ## Inhoudsopgave
 
 - [Beschrijving](#beschrijving)
 - [Gebruik](#gebruik)
 - [Kenmerken](#kenmerken)
+- [User Preference Media Features](#user-preference-media-features)
 - [Installatie](#installatie)
 - [Bronnen](#bronnen)
 - [Licentie](#licentie)
@@ -16,21 +14,17 @@ Een server-side web app waarmee gebruikers foto's kunnen uploaden en bekijken in
 
 ![Free iPhone 17 Pro (1)](https://github.com/user-attachments/assets/37c584ae-ae54-437b-b8f3-ede414c2940f)
 
-
 SnapThis is een foto-deelplatform waarbij gebruikers foto's kunnen uploaden naar een snapmap. De app is gebouwd als server-side rendered website met Express en Liquid templates, en haalt data op via de Directus API.
-
-Het centrale idee achter dit project: **de app moet werken voor iedereen**, ongeacht of JavaScript aan staat, of iemand een trage verbinding heeft, of welk apparaat iemand gebruikt. Dat is Progressive Enhancement in de praktijk, niet als trucje, maar als uitgangspunt.
 
 ## Gebruik
 
-De app heeft een paar duidelijke schermen:
+De volgende schermen heb ik deze sprint gemaakt:
 
-- **Snapmap-overzicht**: een fotogrid met alle foto's in een snapmap. Bovenaan staat een formulier om een nieuwe foto toe te voegen.
-- **Foto-detailpagina**: klik op een foto voor een vergrote weergave met extra info zoals auteur, locatie en datum.
-- **Groepenpagina**: een overzicht van alle groepen en hun snapmaps.
+- **Snapmap-overzicht:** een fotogrid met alle foto's in een snapmap, plus een formulier om een nieuwe foto toe te voegen
+- **Foto-detailpagina:** klik op een foto voor een vergrote weergave met extra info zoals auteur, locatie en datum
+- **Groepenpagina:** een overzicht van alle groepen en hun snapmaps
 
 <img width="1500" height="1125" alt="iPhone 15 Pro" src="https://github.com/user-attachments/assets/527c6555-ef4f-4346-a865-c3b56b648368" />
-
 
 ### Foto uploaden
 
@@ -40,17 +34,13 @@ De app heeft een paar duidelijke schermen:
 4. Bevestig met de "Ja, voeg toe"-knop
 5. Na het uploaden verschijnt een bevestigingsmelding
 
-   
-
 https://github.com/user-attachments/assets/5991149e-4f6c-4703-9d95-8b6e33c0ef3d
-
-
 
 ## Kenmerken
 
 ### Progressive Enhancement
 
-De kern van dit project is dat de app werkt voor iedereen, ongeacht hun apparaat, browser of instellingen. De app is opgebouwd in drie lagen: elke laag voegt iets toe, maar de vorige laag blijft altijd werken.
+De kern van dit project is dat de app werkt voor iedereen, ongeacht hun apparaat, browser of instellingen. De app is opgebouwd in drie lagen, elke laag voegt iets toe, maar de laag eronder blijft altijd werken.
 
 **Laag 1: HTML & Server**
 
@@ -63,13 +53,13 @@ Het uploaden van een foto is de belangrijkste interactie in de app. De eerste ke
 </form>
 ```
 
-Waarom? Omdat dit werkt op elke browser, elk apparaat, met of zonder JavaScript. Dit is de basis. Alles daarna is een verbetering bovenop.
+dit werkt op elke browser, elk apparaat, met of zonder JavaScript. Dit is de basis. Alles daarna is een verbetering bovenop.
 
 **Laag 2: CSS**
 
 CSS voegt stijl en structuur toe, maar ook gedrag dat anders JavaScript zou vereisen.
 
-De succes-melding na een upload is hiervan een goed voorbeeld. Na een geslaagde upload redirect de server naar dezelfde pagina met `#succes` in de URL. Met de CSS `:target` selector wordt de melding dan zichtbaar, zonder één regel JavaScript.
+De succes-melding na een upload is hiervan een voorbeeld. Na een geslaagde upload redirect de server naar dezelfde pagina met `#succes` in de URL. Met de CSS `:target` selector wordt de melding zichtbaar, zonder één regel JavaScript.
 
 ```css
 #succes:not(:target) {
@@ -79,16 +69,7 @@ De succes-melding na een upload is hiervan een goed voorbeeld. Na een geslaagde 
 
 Dit was een bewuste keuze: een succes-melding is geen reden om JavaScript te vereisen. CSS kan dit zelf af.
 
-De foto's in het grid laden in met een staggered fade-in via `sibling-index()`. Daarom staat de animatie alleen aan als de gebruiker daar geen bezwaar tegen heeft.
-
-```css
-@media (prefers-reduced-motion: no-preference) {
-  .snaps-list li {
-    animation: fadeIn 0.4s ease both;
-    animation-delay: calc(sibling-index() * 0.05s);
-  }
-}
-```
+De foto's in het grid laden in met een staggered fade-in via `sibling-index()`. De animatie staat alleen aan als de gebruiker daar geen bezwaar tegen heeft, meer daarover bij [User Preference Media Features](#user-preference-media-features).
 
 **Laag 3: JavaScript**
 
@@ -110,15 +91,73 @@ De preview is dus een verbetering van de ervaring, niet een vereiste voor de fun
 
 **`<details>` en `<summary>` voor de snapmap-dropdown**
 
-`<details>` en `<summary>` zijn semantisch de juiste keuze voor een dropdown. Het is robuuste HTML die precies dit gedrag beschrijft, zonder extra code of JavaScript nodig te hebben.
+`<details>` en `<summary>` zijn semantisch de juiste keuze voor een dropdown. Het is robuuste HTML die precies dit gedrag beschrijft, zonder extra code of JavaScript nodig te hebben. Toegankelijkheid zit er standaard in.
 
 **View Transitions API**
 
-Bij het navigeren naar een foto-detailpagina lijkt de foto soepel te bewegen van de grid naar de detailweergave. Dit werkt via `view-transition-name` in CSS, gecombineerd met de View Transitions API. 
+Bij het navigeren naar een foto-detailpagina lijkt de foto soepel te bewegen van de grid naar de detailweergave. Dit werkt via `view-transition-name` in CSS, gecombineerd met de View Transitions API. Een kleine toevoeging die de app een stuk prettiger maakt om te gebruiken.
 
 **Toegankelijkheid**
 
-Alle knoppen met alleen een icoon hebben een `aria-label`, zodat screenreaders kunnen voorlezen wat de knop doet. Succes-meldingen hebben `role="status"` zodat ze automatisch worden voorgelezen. Focus-stijlen zijn bewust zichtbaar gehouden (rode outline) en niet weggehaald, wat helaas vaak wel gebeurt.
+knoppen met alleen een icoon hebben een `aria-label`, zodat screenreaders kunnen voorlezen wat de knop doet. Succes-meldingen hebben `role="status"` zodat ze automatisch worden voorgelezen. Focus-stijlen zijn  zichtbaar door een rode outline.
+
+## User Preference Media Features
+
+Een onderdeel van Progressive Enhancement is dat je rekening houdt met de voorkeuren van de gebruiker.
+
+In dit project zijn twee van dit soort media features toegepast.
+
+### `prefers-reduced-motion`
+
+De foto's in het grid laden standaard in met een fade-in animatie. Maar die animatie is een *verbetering*, niet de basis. Heeft de gebruiker `reduce motion` ingesteld? Dan valt de app gewoon terug op de basisstijl: foto's zijn gewoon zichtbaar, zonder animatie.
+
+```css
+.photo-item {
+    animation: fade-in 0.5s backwards;
+    animation-delay: calc(100ms * sibling-index());
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .photo-item {
+        animation: none;
+    }
+}
+```
+
+Hetzelfde geldt voor de View Transitions bij paginanavigatie. Die geven een mooie overgang, maar bij `reduce motion` worden ze uitgezet:
+
+```css
+@view-transition { navigation: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none;
+    }
+}
+```
+
+Dit is Progressive Enhancement in de praktijk: de animatie is de enhancement. De inhoud werkt altijd, de animatie is extra.
+
+### `hover: hover`
+
+Op een touchscreen heeft hover geen betekenis, je vinger beweegt niet over een element voordat je het aanraakt. Hover-effecten op touch kunnen zelfs voor rare gedrag zorgen, waarbij een element in een "stuck hover state" blijft hangen na een tik.
+
+Daarom worden hover-stijlen alleen toegevoegd voor apparaten die hover echt ondersteunen, zoals een muis of trackpad.
+
+```css
+@media (hover: hover) {
+    .snapmap-dropdown-list li a:hover {
+        background-color: rgba(146, 146, 146, 0.07);
+    }
+
+    .map-title-btn:hover {
+        transform: scale(1.05);
+    }
+}
+```
+
+De basis werkt op touch. Hover is de verbetering voor muisgebruikers.
 
 ## Installatie
 
@@ -140,11 +179,12 @@ De app draait op `http://localhost:8000`.
 
 ## Bronnen
 
-- [MDN -Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement)
-- [MDN -FileReader API](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
-- [MDN -CSS :target](https://developer.mozilla.org/en-US/docs/Web/CSS/:target)
-- [MDN -prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)
-- [MDN -View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API)
+- [MDN - Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement)
+- [MDN - FileReader API](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)
+- [MDN - CSS :target](https://developer.mozilla.org/en-US/docs/Web/CSS/:target)
+- [MDN - prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)
+- [MDN - hover media feature](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/hover)
+- [MDN - View Transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API)
 - [Directus API Docs](https://docs.directus.io/)
 - [Liquid Template Language](https://liquidjs.com/)
 
