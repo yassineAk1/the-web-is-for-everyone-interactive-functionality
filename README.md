@@ -50,7 +50,7 @@ https://github.com/user-attachments/assets/5991149e-4f6c-4703-9d95-8b6e33c0ef3d
 
 ### Progressive Enhancement
 
-De kern van dit project is dat de app werkt voor iedereen, ongeacht hun apparaat, browser of instellingen. Dat klinkt vanzelfsprekend, maar vraagt om concrete keuzes bij elke feature. De app is opgebouwd in drie lagen: elke laag voegt iets toe, maar de vorige laag blijft altijd werken.
+De kern van dit project is dat de app werkt voor iedereen, ongeacht hun apparaat, browser of instellingen. De app is opgebouwd in drie lagen: elke laag voegt iets toe, maar de vorige laag blijft altijd werken.
 
 **Laag 1: HTML & Server**
 
