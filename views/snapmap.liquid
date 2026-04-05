@@ -38,7 +38,7 @@
   {% endif %}
 
 <form method="POST" action="/snapmap/{{ snapmap.uuid }}" enctype="multipart/form-data" id="snap-form" class="camera-section">
-  <input type="file" name="file" accept="image/*" required id="snap-input" hidden>
+  <input type="file" name="file" accept="image/*" required id="snap-input" class="sr-only">
   <label for="snap-input" class="camera-btn">
     <img src="/assets/camera-alt.svg" alt="">
   </label>

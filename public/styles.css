@@ -5,6 +5,21 @@
     list-style: none;
 }
 
+:focus-visible {
+    outline: 2px solid #ff0000;
+    outline-offset: 1px;
+    border-radius: 2px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -214,6 +229,11 @@ main {
     transform: scale(0.95);
 }
 
+#snap-input:focus-visible + .camera-btn {
+    outline: 2px solid #ff0000;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
 /* -------------Preview photo---------- */
 #snap-preview {
     position: fixed;
@@ -287,12 +307,15 @@ main {
     }
 }
 
+.photo-item a {
+    display: block;
+}
+
 .photo-item img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     display: block;
-
 }
 
 @keyframes fade-in {
