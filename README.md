@@ -67,7 +67,7 @@ De succes-melding na een upload is hiervan een voorbeeld. Na een geslaagde uploa
 }
 ```
 
-Dit was een bewuste keuze: een succes-melding is geen reden om JavaScript te vereisen. CSS kan dit zelf af.
+Dit was een bewuste keuze want een succes-melding kan met CSS ook gebouwd worden.
 
 De foto's in het grid laden in met een staggered fade-in via `sibling-index()`. De animatie staat alleen aan als de gebruiker daar geen bezwaar tegen heeft, meer daarover bij [User Preference Media Features](#user-preference-media-features).
 
