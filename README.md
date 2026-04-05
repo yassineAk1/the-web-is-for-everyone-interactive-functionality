@@ -2,7 +2,6 @@
 
 Een server-side web app waarmee gebruikers foto's kunnen uploaden en bekijken in snapmaps.
 
-![SnapThis preview](public/assets/DetailPhotoView.png)
 
 ## Inhoudsopgave
 
@@ -15,6 +14,9 @@ Een server-side web app waarmee gebruikers foto's kunnen uploaden en bekijken in
 
 ## Beschrijving
 
+![Free iPhone 17 Pro (1)](https://github.com/user-attachments/assets/37c584ae-ae54-437b-b8f3-ede414c2940f)
+
+
 SnapThis is een foto-deelplatform waarbij gebruikers foto's kunnen uploaden naar een snapmap. De app is gebouwd als server-side rendered website met Express en Liquid templates, en haalt data op via de Directus API.
 
 Het centrale idee achter dit project: **de app moet werken voor iedereen**, ongeacht of JavaScript aan staat, of iemand een trage verbinding heeft, of welk apparaat iemand gebruikt. Dat is Progressive Enhancement in de praktijk, niet als trucje, maar als uitgangspunt.
@@ -26,6 +28,9 @@ De app heeft een paar duidelijke schermen:
 - **Snapmap-overzicht**: een fotogrid met alle foto's in een snapmap. Bovenaan staat een formulier om een nieuwe foto toe te voegen.
 - **Foto-detailpagina**: klik op een foto voor een vergrote weergave met extra info zoals auteur, locatie en datum.
 - **Groepenpagina**: een overzicht van alle groepen en hun snapmaps.
+
+<img width="1500" height="1125" alt="iPhone 15 Pro" src="https://github.com/user-attachments/assets/527c6555-ef4f-4346-a865-c3b56b648368" />
+
 
 ### Foto uploaden
 
